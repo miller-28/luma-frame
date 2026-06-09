@@ -38,6 +38,9 @@ export function App() {
         ]);
         const appWindow = getCurrentWindow();
         const savedWindow = settings?.window;
+        const savedAlwaysOnTop = settings?.always_on_top ?? settings?.alwaysOnTop ?? DEFAULT_SETTINGS.always_on_top;
+
+        await appWindow.setAlwaysOnTop(Boolean(savedAlwaysOnTop));
 
         if (savedWindow?.width && savedWindow?.height) {
           await appWindow.setSize(new LogicalSize(savedWindow.width, savedWindow.height));
