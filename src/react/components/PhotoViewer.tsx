@@ -59,13 +59,14 @@ export function PhotoViewer({ refreshToken, onOpenSettings }: PhotoViewerProps) 
 
   useEffect(() => {
     if (images.length < 2) return undefined;
+    if (hovered) return undefined;
 
     const timer = window.setInterval(() => {
       setCurrentIndex((index) => (index + 1) % images.length);
     }, intervalSeconds * 1000);
 
     return () => window.clearInterval(timer);
-  }, [images.length, intervalSeconds]);
+  }, [hovered, images.length, intervalSeconds]);
 
   useEffect(() => {
     if (!images.length) return undefined;
@@ -142,6 +143,13 @@ export function PhotoViewer({ refreshToken, onOpenSettings }: PhotoViewerProps) 
         </div>
       </div>
 
+      {(loading || (hasImages && !currentSrc)) && (
+        <div className="loading-overlay" role="status" aria-live="polite">
+          <div className="spinner" />
+          <span>Loading images...</span>
+        </div>
+      )}
+
       <div className="image-area">
         {hasImages && currentSrc ? (
           <>
@@ -154,7 +162,10 @@ export function PhotoViewer({ refreshToken, onOpenSettings }: PhotoViewerProps) 
             </button>
           </>
         ) : loading || hasImages ? (
-          <div className="empty">Loading images from Pictures...</div>
+          <div className="empty loading-empty">
+            <div className="spinner" />
+            <span>Loading images from Pictures...</span>
+          </div>
         ) : (
           <div className="empty">No images found. Set a folder in settings.</div>
         )}

@@ -66,6 +66,7 @@ export function SettingsPanel({ visible, onClose, onSaved }: SettingsPanelProps)
 
     onSaved();
     onClose();
+    window.location.reload();
   }
 
   async function deleteSettings() {

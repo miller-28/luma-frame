@@ -4,9 +4,22 @@
   height: 100%;
   overflow: hidden;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 34%),
-    #101218;
+    radial-gradient(circle at 24% 22%, rgba(96, 205, 255, 0.16), transparent 34%),
+    radial-gradient(circle at 84% 74%, rgba(171, 130, 255, 0.13), transparent 36%),
+    radial-gradient(circle at 50% 118%, rgba(255, 211, 108, 0.1), transparent 34%),
+    linear-gradient(180deg, rgba(45, 50, 63, 0.68), rgba(18, 21, 30, 0.56));
+  backdrop-filter: blur(18px) saturate(138%);
   color: var(--text-primary);
+}
+
+.viewer::before {
+  position: absolute;
+  inset: 44px 0 0;
+  content: "";
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 42%),
+    rgba(255, 255, 255, 0.015);
 }
 
 .top-stripe {
@@ -99,6 +112,7 @@
 }
 
 .image-area {
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
@@ -162,12 +176,55 @@
 }
 
 .empty {
+  position: relative;
   max-width: min(320px, calc(100% - 32px));
   padding: 18px 20px;
   border: 1px solid var(--stroke-soft);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.045);
+  backdrop-filter: blur(18px) saturate(130%);
+  background: rgba(255, 255, 255, 0.072);
   color: var(--text-secondary);
   box-shadow: var(--shadow-soft);
   text-align: center;
+  z-index: 2;
+}
+
+.loading-empty,
+.loading-overlay {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 70;
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 1px solid var(--stroke-soft);
+  border-radius: 8px;
+  backdrop-filter: blur(18px) saturate(135%);
+  background: rgba(36, 41, 52, 0.68);
+  color: var(--text-secondary);
+  font-size: 13px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spinner-rotate 760ms linear infinite;
+  flex: 0 0 auto;
+}
+
+@keyframes spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
 }
