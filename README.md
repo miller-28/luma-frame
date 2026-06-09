@@ -10,21 +10,13 @@ Install dependencies:
 npm install
 ```
 
-Run the full desktop development environment:
-
-```powershell
-npm run dev
-```
-
-This starts the Vite dev server at `http://localhost:1420` and launches the Tauri desktop app against that server.
-
-Run only the frontend dev server:
+Start the frontend dev server:
 
 ```powershell
 npm run start
 ```
 
-Run the Tauri app separately when the frontend dev server is already running:
+In another terminal, launch the Tauri desktop app against the running dev server:
 
 ```powershell
 npm run start-app
