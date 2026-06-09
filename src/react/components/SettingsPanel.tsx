@@ -6,12 +6,12 @@ import "./SettingsPanel.css";
 
 type SettingsPanelProps = {
   visible: boolean;
-  windowSize: { width: number; height: number };
-  onClose: () => void;
-  onSaved: () => void;
+  window_size: { width: number; height: number };
+  on_close: () => void;
+  on_saved: () => void;
 };
 
-export function SettingsPanel({ visible, windowSize, onClose, onSaved }: SettingsPanelProps) {
+export function SettingsPanel({ visible, window_size, on_close, on_saved }: SettingsPanelProps) {
   const [folderPath, setFolderPath] = useState("");
   const [intervalSeconds, setIntervalSeconds] = useState(DEFAULT_SETTINGS.interval_seconds);
   const [alwaysOnTop, setAlwaysOnTop] = useState(DEFAULT_SETTINGS.always_on_top);
@@ -35,10 +35,10 @@ export function SettingsPanel({ visible, windowSize, onClose, onSaved }: Setting
 
     void (async () => {
       const settings = (await settingsService.getSettings()) ?? {};
-      setFolderPath(settings.folder_path ?? settings.folderPath ?? "");
-      setIntervalSeconds(settings.interval_seconds ?? settings.intervalSeconds ?? DEFAULT_SETTINGS.interval_seconds);
-      setAlwaysOnTop(settings.always_on_top ?? settings.alwaysOnTop ?? DEFAULT_SETTINGS.always_on_top);
-      setRandomSlideshow(settings.random_slideshow ?? settings.randomSlideshow ?? DEFAULT_SETTINGS.random_slideshow);
+      setFolderPath(settings.folder_path ?? "");
+      setIntervalSeconds(settings.interval_seconds ?? DEFAULT_SETTINGS.interval_seconds);
+      setAlwaysOnTop(settings.always_on_top ?? DEFAULT_SETTINGS.always_on_top);
+      setRandomSlideshow(settings.random_slideshow ?? DEFAULT_SETTINGS.random_slideshow);
       setOpacity(settings.opacity ?? DEFAULT_SETTINGS.opacity);
       setWindowWidth(settings.window?.width ?? DEFAULT_SETTINGS.window.width);
       setWindowHeight(settings.window?.height ?? DEFAULT_SETTINGS.window.height);
@@ -48,9 +48,9 @@ export function SettingsPanel({ visible, windowSize, onClose, onSaved }: Setting
   useEffect(() => {
     if (!visible) return;
 
-    setWindowWidth(windowSize.width);
-    setWindowHeight(windowSize.height);
-  }, [visible, windowSize]);
+    setWindowWidth(window_size.width);
+    setWindowHeight(window_size.height);
+  }, [visible, window_size]);
 
   if (!visible) return null;
 
@@ -76,25 +76,25 @@ export function SettingsPanel({ visible, windowSize, onClose, onSaved }: Setting
       await settingsService.saveWindowSettings(windowSettings);
     }
 
-    onSaved();
-    onClose();
+    on_saved();
+    on_close();
     window.location.reload();
   }
 
   async function resetSettings() {
     await settingsService.resetSettingsToDefaults();
     resetFormToDefaults();
-    onSaved();
+    on_saved();
     window.location.reload();
   }
 
   return (
-    <div className="settings-root open" role="dialog" aria-modal="true" onMouseDown={onClose}>
+    <div className="settings-root open" role="dialog" aria-modal="true" onMouseDown={on_close}>
       <div className="settings-backdrop" />
       <section className="settings-inner" onMouseDown={(event) => event.stopPropagation()}>
         <div className="drag-bar" onMouseDown={() => void startWindowDrag()} title="Drag to move window">
           <span className="drag-title">Settings</span>
-          <button className="close-btn" type="button" onClick={onClose} aria-label="Close">
+          <button className="close-btn" type="button" onClick={on_close} aria-label="Close">
             {"\u00d7"}
           </button>
         </div>

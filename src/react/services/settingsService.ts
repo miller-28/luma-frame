@@ -11,7 +11,7 @@ export const settingsService = {
     const merged = { ...current, ...settings };
     const result = await photoService.saveSettings(merged);
 
-    const alwaysOnTop = merged.always_on_top ?? merged.alwaysOnTop;
+    const alwaysOnTop = merged.always_on_top;
     if (alwaysOnTop !== undefined) {
       await photoService.setAlwaysOnTop(Boolean(alwaysOnTop));
     }

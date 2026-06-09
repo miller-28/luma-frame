@@ -45,7 +45,7 @@ export function App() {
         ]);
         const appWindow = getCurrentWindow();
         const savedWindow = settings?.window;
-        const savedAlwaysOnTop = settings?.always_on_top ?? settings?.alwaysOnTop ?? DEFAULT_SETTINGS.always_on_top;
+        const savedAlwaysOnTop = settings?.always_on_top ?? DEFAULT_SETTINGS.always_on_top;
 
         await appWindow.setAlwaysOnTop(Boolean(savedAlwaysOnTop));
 
@@ -100,14 +100,14 @@ export function App() {
   return (
     <main className="app-shell full-bleed" style={{ opacity: appOpacity }}>
       <PhotoViewer
-        refreshToken={refreshToken}
-        onOpenSettings={() => setSettingsOpen(true)}
+        refresh_token={refreshToken}
+        on_open_settings={() => setSettingsOpen(true)}
       />
       <SettingsPanel
         visible={settingsOpen}
-        windowSize={windowSize}
-        onClose={() => setSettingsOpen(false)}
-        onSaved={handleSaved}
+        window_size={windowSize}
+        on_close={() => setSettingsOpen(false)}
+        on_saved={handleSaved}
       />
     </main>
   );

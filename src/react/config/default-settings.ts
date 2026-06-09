@@ -13,13 +13,9 @@ export const DEFAULT_SETTINGS = {
 
 export type AppSettings = {
   folder_path?: string | null;
-  folderPath?: string | null;
   interval_seconds?: number;
-  intervalSeconds?: number;
   always_on_top?: boolean;
-  alwaysOnTop?: boolean;
   random_slideshow?: boolean;
-  randomSlideshow?: boolean;
   opacity?: number;
   max_images?: number | null;
   window?: { x?: number; y?: number; width?: number; height?: number };

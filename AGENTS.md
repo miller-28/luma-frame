@@ -1,8 +1,8 @@
-# GitHub Copilot Instructions - LumaFrame
+# Codex Instructions - LumaFrame
+
+LumaFrame is a React, Vite, TypeScript, and Tauri desktop app for a floating local photo frame. Apply these rules whenever you add, refactor, or review code in this repository.
 
 ## Code Quality & Design Principles
-
-LumaFrame is a React, Vite, TypeScript, and Tauri desktop app for a floating local photo frame. All code in this project must adhere to the following principles:
 
 ### SOLID Principles
 - **Single Responsibility** - each class, module, component, hook, and function has one clear reason to change. UI components handle rendering and local state, services contain business logic and persistence, utilities provide pure helpers.
@@ -45,6 +45,4 @@ Strict layering: **React Components -> Services -> Utilities/Adapters**.
 - Run `npx tsc --noEmit` for quick type checks when a full build is unnecessary.
 - For Rust/Tauri changes, run `cargo check` from `src-tauri` when practical.
 
----
-
-Follow these rules when adding or refactoring code. If a change would require broad renames or risky migration work, keep compatibility at the boundary and document the follow-up.
+Follow these rules. If a change would require broad renames or risky migration work, keep compatibility at the boundary and document the follow-up.

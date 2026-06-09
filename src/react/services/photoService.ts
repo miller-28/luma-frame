@@ -1,5 +1,12 @@
 import { DEFAULT_SETTINGS, type AppSettings } from "../config/default-settings";
 
+type LegacyAppSettings = AppSettings & {
+  folderPath?: string | null;
+  intervalSeconds?: number;
+  alwaysOnTop?: boolean;
+  randomSlideshow?: boolean;
+};
+
 type FsModule = {
   mkdir?: (path: string, options?: { recursive?: boolean }) => Promise<void>;
   readDir?: (path: string | URL) => Promise<Array<{ name: string; isDirectory: boolean; isFile: boolean }>>;
@@ -23,7 +30,7 @@ const IMAGE_EXTENSIONS = new Set([
   ".tif",
 ]);
 
-function normalizeSettings(settings: AppSettings | null | undefined): AppSettings | null {
+function normalizeSettings(settings: LegacyAppSettings | null | undefined): AppSettings | null {
   if (!settings) return null;
 
   return {
@@ -161,7 +168,7 @@ export class PhotoService {
       const filePath = await this.getSettingsFilePath();
       if (fs?.readTextFile && filePath) {
         const text = await fs.readTextFile(filePath);
-        const parsed = normalizeSettings(JSON.parse(text));
+        const parsed = normalizeSettings(JSON.parse(text) as LegacyAppSettings);
         const merged = normalizeSettings({ ...DEFAULT_SETTINGS, ...parsed });
         localStorage.setItem(SETTINGS_JSON_KEY, JSON.stringify(merged));
         return merged;
@@ -173,7 +180,7 @@ export class PhotoService {
 
     try {
       const raw = localStorage.getItem(SETTINGS_JSON_KEY);
-      const parsed = raw ? normalizeSettings(JSON.parse(raw)) : null;
+      const parsed = raw ? normalizeSettings(JSON.parse(raw) as LegacyAppSettings) : null;
       return normalizeSettings({ ...DEFAULT_SETTINGS, ...(parsed ?? {}) });
     } catch {
       return normalizeSettings(DEFAULT_SETTINGS);

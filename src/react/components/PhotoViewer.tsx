@@ -4,8 +4,8 @@ import { closeApp, startWindowDrag, toImageSrc } from "../utils/tauri";
 import "./PhotoViewer.css";
 
 type PhotoViewerProps = {
-  refreshToken: number;
-  onOpenSettings: () => void;
+  refresh_token: number;
+  on_open_settings: () => void;
 };
 
 const SOURCE_WINDOW_RADIUS = 5;
@@ -21,7 +21,7 @@ function getSourceWindowIndexes(currentIndex: number, length: number) {
   return indexes.filter((index, position) => indexes.indexOf(index) === position);
 }
 
-export function PhotoViewer({ refreshToken, onOpenSettings }: PhotoViewerProps) {
+export function PhotoViewer({ refresh_token, on_open_settings }: PhotoViewerProps) {
   const [images, setImages] = useState<string[]>([]);
   const [imageSources, setImageSources] = useState<Record<number, string>>({});
   const [folder, setFolder] = useState<string | null>(null);
@@ -38,9 +38,9 @@ export function PhotoViewer({ refreshToken, onOpenSettings }: PhotoViewerProps) 
     setCurrentIndex(0);
 
     const settings = (await photoService.loadSettingsAsync()) ?? {};
-    const savedFolder = settings.folder_path ?? settings.folderPath ?? photoService.loadFolder();
-    const nextInterval = settings.interval_seconds ?? settings.intervalSeconds ?? 5;
-    const nextRandomSlideshow = settings.random_slideshow ?? settings.randomSlideshow ?? false;
+    const savedFolder = settings.folder_path ?? photoService.loadFolder();
+    const nextInterval = settings.interval_seconds ?? 5;
+    const nextRandomSlideshow = settings.random_slideshow ?? false;
 
     setIntervalSeconds(Math.max(1, Number(nextInterval) || 5));
     setRandomSlideshow(Boolean(nextRandomSlideshow));
@@ -55,7 +55,7 @@ export function PhotoViewer({ refreshToken, onOpenSettings }: PhotoViewerProps) 
 
   useEffect(() => {
     void refreshImages();
-  }, [refreshImages, refreshToken]);
+  }, [refreshImages, refresh_token]);
 
   useEffect(() => {
     if (images.length < 2) return undefined;
@@ -143,7 +143,7 @@ export function PhotoViewer({ refreshToken, onOpenSettings }: PhotoViewerProps) 
           <span className="title">{title}</span>
         </div>
         <div className="right">
-          <button className="icon-btn" type="button" onClick={onOpenSettings} title="Settings" aria-label="Settings">
+          <button className="icon-btn" type="button" onClick={on_open_settings} title="Settings" aria-label="Settings">
             {"\u2699"}
           </button>
           <button className="icon-btn" type="button" onClick={() => void closeApp()} title="Close" aria-label="Close">
