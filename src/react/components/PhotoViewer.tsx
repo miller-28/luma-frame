@@ -27,6 +27,7 @@ export function PhotoViewer({ refreshToken, onOpenSettings }: PhotoViewerProps) 
   const [folder, setFolder] = useState<string | null>(null);
   const [opacity, setOpacity] = useState(1);
   const [intervalSeconds, setIntervalSeconds] = useState(5);
+  const [randomSlideshow, setRandomSlideshow] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -41,9 +42,11 @@ export function PhotoViewer({ refreshToken, onOpenSettings }: PhotoViewerProps) 
     const savedFolder = settings.folder_path ?? settings.folderPath ?? photoService.loadFolder();
     const nextOpacity = settings.opacity ?? 1;
     const nextInterval = settings.interval_seconds ?? settings.intervalSeconds ?? 5;
+    const nextRandomSlideshow = settings.random_slideshow ?? settings.randomSlideshow ?? false;
 
     setOpacity(nextOpacity);
     setIntervalSeconds(Math.max(1, Number(nextInterval) || 5));
+    setRandomSlideshow(Boolean(nextRandomSlideshow));
 
     const folderToUse = await photoService.getEffectiveFolder(savedFolder ?? null);
     setFolder(folderToUse);
@@ -62,11 +65,21 @@ export function PhotoViewer({ refreshToken, onOpenSettings }: PhotoViewerProps) 
     if (hovered) return undefined;
 
     const timer = window.setInterval(() => {
-      setCurrentIndex((index) => (index + 1) % images.length);
+      setCurrentIndex((index) => {
+        if (!randomSlideshow) return (index + 1) % images.length;
+
+        if (images.length === 2) return (index + 1) % images.length;
+
+        let nextIndex = index;
+        while (nextIndex === index) {
+          nextIndex = Math.floor(Math.random() * images.length);
+        }
+        return nextIndex;
+      });
     }, intervalSeconds * 1000);
 
     return () => window.clearInterval(timer);
-  }, [hovered, images.length, intervalSeconds]);
+  }, [hovered, images.length, intervalSeconds, randomSlideshow]);
 
   useEffect(() => {
     if (!images.length) return undefined;

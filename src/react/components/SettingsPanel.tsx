@@ -14,6 +14,7 @@ export function SettingsPanel({ visible, onClose, onSaved }: SettingsPanelProps)
   const [folderPath, setFolderPath] = useState("");
   const [intervalSeconds, setIntervalSeconds] = useState(DEFAULT_SETTINGS.interval_seconds);
   const [alwaysOnTop, setAlwaysOnTop] = useState(DEFAULT_SETTINGS.always_on_top);
+  const [randomSlideshow, setRandomSlideshow] = useState(DEFAULT_SETTINGS.random_slideshow);
   const [opacity, setOpacity] = useState(DEFAULT_SETTINGS.opacity);
   const [windowWidth, setWindowWidth] = useState<number | "">(DEFAULT_SETTINGS.window.width);
   const [windowHeight, setWindowHeight] = useState<number | "">(DEFAULT_SETTINGS.window.height);
@@ -22,6 +23,7 @@ export function SettingsPanel({ visible, onClose, onSaved }: SettingsPanelProps)
     setFolderPath("");
     setIntervalSeconds(DEFAULT_SETTINGS.interval_seconds);
     setAlwaysOnTop(DEFAULT_SETTINGS.always_on_top);
+    setRandomSlideshow(DEFAULT_SETTINGS.random_slideshow);
     setOpacity(DEFAULT_SETTINGS.opacity);
     setWindowWidth(DEFAULT_SETTINGS.window.width);
     setWindowHeight(DEFAULT_SETTINGS.window.height);
@@ -35,6 +37,7 @@ export function SettingsPanel({ visible, onClose, onSaved }: SettingsPanelProps)
       setFolderPath(settings.folder_path ?? settings.folderPath ?? "");
       setIntervalSeconds(settings.interval_seconds ?? settings.intervalSeconds ?? DEFAULT_SETTINGS.interval_seconds);
       setAlwaysOnTop(settings.always_on_top ?? settings.alwaysOnTop ?? DEFAULT_SETTINGS.always_on_top);
+      setRandomSlideshow(settings.random_slideshow ?? settings.randomSlideshow ?? DEFAULT_SETTINGS.random_slideshow);
       setOpacity(settings.opacity ?? DEFAULT_SETTINGS.opacity);
       setWindowWidth(settings.window?.width ?? DEFAULT_SETTINGS.window.width);
       setWindowHeight(settings.window?.height ?? DEFAULT_SETTINGS.window.height);
@@ -56,6 +59,7 @@ export function SettingsPanel({ visible, onClose, onSaved }: SettingsPanelProps)
       folder_path: folderPath.trim() || null,
       interval_seconds: Math.max(1, Number(intervalSeconds) || DEFAULT_SETTINGS.interval_seconds),
       always_on_top: alwaysOnTop,
+      random_slideshow: randomSlideshow,
       opacity: Number(opacity),
       window: windowSettings,
     });
@@ -105,6 +109,15 @@ export function SettingsPanel({ visible, onClose, onSaved }: SettingsPanelProps)
           <label className="row checkbox-row">
             <span>Always on top</span>
             <input type="checkbox" checked={alwaysOnTop} onChange={(event) => setAlwaysOnTop(event.target.checked)} />
+          </label>
+
+          <label className="row checkbox-row">
+            <span>Random slideshow</span>
+            <input
+              type="checkbox"
+              checked={randomSlideshow}
+              onChange={(event) => setRandomSlideshow(event.target.checked)}
+            />
           </label>
 
           <label className="row">

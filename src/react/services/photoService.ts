@@ -31,6 +31,7 @@ function normalizeSettings(settings: AppSettings | null | undefined): AppSetting
     folder_path: settings.folder_path ?? settings.folderPath ?? null,
     interval_seconds: settings.interval_seconds ?? settings.intervalSeconds ?? DEFAULT_SETTINGS.interval_seconds,
     always_on_top: settings.always_on_top ?? settings.alwaysOnTop ?? DEFAULT_SETTINGS.always_on_top,
+    random_slideshow: settings.random_slideshow ?? settings.randomSlideshow ?? DEFAULT_SETTINGS.random_slideshow,
     opacity: settings.opacity ?? DEFAULT_SETTINGS.opacity,
     max_images: settings.max_images ?? DEFAULT_SETTINGS.max_images,
     window: settings.window ?? DEFAULT_SETTINGS.window,
