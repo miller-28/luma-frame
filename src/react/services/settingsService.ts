@@ -1,5 +1,5 @@
 import { photoService } from "./photoService";
-import type { AppSettings } from "../config/default-settings";
+import { DEFAULT_SETTINGS, type AppSettings } from "../config/default-settings";
 
 export const settingsService = {
   getSettings() {
@@ -25,5 +25,10 @@ export const settingsService = {
 
   deleteSettings() {
     return photoService.deleteSettings();
+  },
+
+  async resetSettingsToDefaults() {
+    await photoService.saveSettings(DEFAULT_SETTINGS);
+    await photoService.setAlwaysOnTop(DEFAULT_SETTINGS.always_on_top);
   },
 };

@@ -6,11 +6,12 @@ import "./SettingsPanel.css";
 
 type SettingsPanelProps = {
   visible: boolean;
+  windowSize: { width: number; height: number };
   onClose: () => void;
   onSaved: () => void;
 };
 
-export function SettingsPanel({ visible, onClose, onSaved }: SettingsPanelProps) {
+export function SettingsPanel({ visible, windowSize, onClose, onSaved }: SettingsPanelProps) {
   const [folderPath, setFolderPath] = useState("");
   const [intervalSeconds, setIntervalSeconds] = useState(DEFAULT_SETTINGS.interval_seconds);
   const [alwaysOnTop, setAlwaysOnTop] = useState(DEFAULT_SETTINGS.always_on_top);
@@ -44,6 +45,13 @@ export function SettingsPanel({ visible, onClose, onSaved }: SettingsPanelProps)
     })();
   }, [visible]);
 
+  useEffect(() => {
+    if (!visible) return;
+
+    setWindowWidth(windowSize.width);
+    setWindowHeight(windowSize.height);
+  }, [visible, windowSize]);
+
   if (!visible) return null;
 
   async function save() {
@@ -73,10 +81,11 @@ export function SettingsPanel({ visible, onClose, onSaved }: SettingsPanelProps)
     window.location.reload();
   }
 
-  async function deleteSettings() {
-    await settingsService.deleteSettings();
+  async function resetSettings() {
+    await settingsService.resetSettingsToDefaults();
     resetFormToDefaults();
     onSaved();
+    window.location.reload();
   }
 
   return (
@@ -153,8 +162,8 @@ export function SettingsPanel({ visible, onClose, onSaved }: SettingsPanelProps)
           </label>
 
           <div className="row actions">
-            <button className="delete-settings-btn" type="button" onClick={() => void deleteSettings()}>
-              Delete settings
+            <button className="reset-settings-btn" type="button" onClick={() => void resetSettings()}>
+              Reset
             </button>
             <button className="save-btn" type="button" onClick={() => void save()}>
               Save

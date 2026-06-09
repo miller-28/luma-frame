@@ -5,11 +5,18 @@ import { DEFAULT_SETTINGS } from "./config/default-settings";
 import { settingsService } from "./services/settingsService";
 import "./App.css";
 
+type WindowSize = {
+  width: number;
+  height: number;
+};
+
 export function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [refreshToken, setRefreshToken] = useState(0);
   const [appOpacity, setAppOpacity] = useState(DEFAULT_SETTINGS.opacity);
+  const [windowSize, setWindowSize] = useState<WindowSize>(DEFAULT_SETTINGS.window);
   const saveWindowTimer = useRef<number | undefined>(undefined);
+  const ignoreResizeUntil = useRef(0);
 
   const loadAppAppearance = useCallback(async () => {
     const settings = await settingsService.getSettings();
@@ -43,21 +50,35 @@ export function App() {
         await appWindow.setAlwaysOnTop(Boolean(savedAlwaysOnTop));
 
         if (savedWindow?.width && savedWindow?.height) {
+          setWindowSize({ width: savedWindow.width, height: savedWindow.height });
+          ignoreResizeUntil.current = Date.now() + 750;
           await appWindow.setSize(new LogicalSize(savedWindow.width, savedWindow.height));
+        } else {
+          const scaleFactor = await appWindow.scaleFactor();
+          const currentSize = (await appWindow.innerSize()).toLogical(scaleFactor);
+          setWindowSize({
+            width: Math.round(currentSize.width),
+            height: Math.round(currentSize.height),
+          });
         }
 
-        unlistenResize = await appWindow.onResized(({ payload }) => {
+        unlistenResize = await appWindow.onResized(async ({ payload }) => {
           if (disposed) return;
+          if (Date.now() < ignoreResizeUntil.current) return;
 
+          const scaleFactor = await appWindow.scaleFactor();
+          const logicalSize = payload.toLogical(scaleFactor);
+          const nextSize = {
+            width: Math.round(logicalSize.width),
+            height: Math.round(logicalSize.height),
+          };
+
+          setWindowSize(nextSize);
           window.clearTimeout(saveWindowTimer.current);
           saveWindowTimer.current = window.setTimeout(() => {
             void (async () => {
               try {
-                const scaleFactor = await appWindow.scaleFactor();
-                await settingsService.saveWindowSettings({
-                  width: Math.round(payload.width / scaleFactor),
-                  height: Math.round(payload.height / scaleFactor),
-                });
+                await settingsService.saveWindowSettings(nextSize);
               } catch (error) {
                 console.warn("Could not persist window size", error);
               }
@@ -84,6 +105,7 @@ export function App() {
       />
       <SettingsPanel
         visible={settingsOpen}
+        windowSize={windowSize}
         onClose={() => setSettingsOpen(false)}
         onSaved={handleSaved}
       />

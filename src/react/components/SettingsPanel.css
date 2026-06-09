@@ -132,7 +132,7 @@
   margin-bottom: 0;
 }
 
-.delete-settings-btn,
+.reset-settings-btn,
 .save-btn {
   min-width: 72px;
   height: 32px;
@@ -143,14 +143,14 @@
   transition: background 120ms ease, transform 120ms ease, box-shadow 120ms ease;
 }
 
-.delete-settings-btn {
+.reset-settings-btn {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--stroke-soft);
   color: var(--text-secondary);
 }
 
-.delete-settings-btn:hover {
-  background: rgba(255, 95, 95, 0.14);
+.reset-settings-btn:hover {
+  background: rgba(96, 205, 255, 0.13);
   color: var(--text-primary);
 }
 
@@ -164,13 +164,13 @@
   box-shadow: 0 8px 18px rgba(76, 194, 255, 0.22);
 }
 
-.delete-settings-btn:active,
+.reset-settings-btn:active,
 .save-btn:active {
   transform: scale(0.98);
 }
 
 .save-btn:focus-visible,
-.delete-settings-btn:focus-visible,
+.reset-settings-btn:focus-visible,
 .close-btn:focus-visible,
 .settings-body input:focus-visible {
   outline: 2px solid var(--accent);
